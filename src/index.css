@@ -1,0 +1,20 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:is(.dark *));
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --color-primary: #3b82f6;
+  --color-darkBg: #121212;
+  --color-darkCard: #1e1e1e;
+  --color-darkText: #e5e7eb;
+  --color-darkBorder: #374151;
+}
+
+body {
+  @apply antialiased text-gray-800 bg-gray-50;
+}
+
+.dark body {
+  @apply text-gray-200 bg-[#121212];
+}
