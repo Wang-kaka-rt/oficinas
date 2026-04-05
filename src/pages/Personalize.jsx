@@ -23,12 +23,12 @@ const Personalize = () => {
 
   return (
     <div>
-      <PageHeader title="个性化设置" subtitle="LAW FIRM MANAGEMENT OS" />
+      <PageHeader 
+        title="个性化设置" 
+        subtitle="选择你喜欢的系统主题界面，设置会自动保存。" 
+      />
       
-      <div className="bg-white dark:bg-[#1e1e1e] rounded-2xl shadow-sm border border-gray-100 dark:border-[#333] p-6">
-        <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-2">外观与主题</h2>
-        <p className="text-sm text-gray-500 mb-8">选择你喜欢的系统主题界面，设置会自动保存。</p>
-        
+      <div className="mt-6">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {/* Light Theme Card */}
           <button 

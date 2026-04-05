@@ -18,7 +18,7 @@ const DashboardCard = ({ icon: Icon, title, value }) => (
 const Dashboard = () => {
   return (
     <div>
-      <PageHeader title="工作概览" subtitle="LAW FIRM MANAGEMENT OS" />
+      <PageHeader title="工作概览" subtitle="查看团队工作进度与数据统计" />
       
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
         <DashboardCard icon={ShoppingCart} title="活跃订单" value="3" />

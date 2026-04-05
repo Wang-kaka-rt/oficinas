@@ -1,10 +1,31 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import PageHeader from '../components/PageHeader';
-import { Search, Plus, MoreHorizontal, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Search, Plus, MoreHorizontal, ChevronLeft, ChevronRight, Edit, Workflow, FolderOpen, X } from 'lucide-react';
 
 const Orders = () => {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('全部');
   const [currentPage, setCurrentPage] = useState(1);
+  const [openDropdownId, setOpenDropdownId] = useState(null);
+  const [workflowModalOpen, setWorkflowModalOpen] = useState(false);
+  const [filesModalOpen, setFilesModalOpen] = useState(false);
+  const [selectedOrder, setSelectedOrder] = useState(null);
+  
+  const dropdownRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setOpenDropdownId(null);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.addEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   const tabs = ['全部', '进行中', '已结案'];
 
@@ -40,20 +61,21 @@ const Orders = () => {
 
   return (
     <div>
-      <PageHeader title="业务订单" subtitle="LAW FIRM MANAGEMENT OS" />
-      
-      <div className="bg-white dark:bg-[#1e1e1e] rounded-2xl shadow-sm border border-gray-100 dark:border-[#333] p-6">
-        <div className="flex justify-between items-center mb-6">
-          <div>
-            <h2 className="text-xl font-bold text-gray-900 dark:text-white">业务订单中心</h2>
-            <p className="text-sm text-gray-500 mt-1">管理全流程法律服务订单与进度</p>
-          </div>
-          <button className="flex items-center bg-gray-900 dark:bg-white text-white dark:text-gray-900 px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors">
+      <PageHeader 
+        title="业务订单" 
+        subtitle="管理全流程法律服务订单与进度" 
+        rightElement={
+          <button 
+            onClick={() => navigate('/orders/new')}
+            className="flex items-center bg-gray-900 dark:bg-white text-white dark:text-gray-900 px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors"
+          >
             <Plus className="w-4 h-4 mr-2" />
             创建新订单
           </button>
-        </div>
-
+        }
+      />
+      
+      <div className="mt-6">
         <div className="flex justify-between items-center mb-6">
           <div className="flex space-x-1 bg-gray-50 dark:bg-[#2a2a2a] p-1 rounded-lg">
             {tabs.map((tab) => (
@@ -81,7 +103,7 @@ const Orders = () => {
           </div>
         </div>
 
-        <div className="overflow-x-auto">
+        <div className="overflow-visible">
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="border-b border-gray-100 dark:border-[#333]">
@@ -95,7 +117,7 @@ const Orders = () => {
             </thead>
             <tbody>
               {data.map((row, idx) => (
-                <tr key={idx} className="border-b border-gray-50 dark:border-[#2a2a2a] hover:bg-gray-50 dark:hover:bg-[#2a2a2a] transition-colors">
+                <tr key={idx} className="border-b border-gray-200 dark:border-[#333] hover:bg-gray-50 dark:hover:bg-[#2a2a2a] transition-colors">
                   <td className="py-4 px-4">
                     <div className="text-xs text-gray-500 font-mono mb-1">{row.id}</div>
                     <div className="font-medium text-gray-900 dark:text-white">{row.name}</div>
@@ -122,9 +144,53 @@ const Orders = () => {
                     </span>
                   </td>
                   <td className="py-4 px-4 text-right">
-                    <button className="p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
-                      <MoreHorizontal className="w-5 h-5" />
-                    </button>
+                    <div className="relative inline-block text-left" ref={openDropdownId === row.id ? dropdownRef : null}>
+                      <button 
+                        onClick={() => setOpenDropdownId(openDropdownId === row.id ? null : row.id)}
+                        className="p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
+                      >
+                        <MoreHorizontal className="w-5 h-5" />
+                      </button>
+                      
+                      {openDropdownId === row.id && (
+                        <div className="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white dark:bg-[#1e1e1e] ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 dark:divide-[#333] focus:outline-none z-50 border border-gray-200 dark:border-[#333]">
+                          <div className="py-1">
+                            <button
+                              onClick={() => {
+                                setOpenDropdownId(null);
+                                navigate(`/orders/${row.id}`);
+                              }}
+                              className="group flex items-center w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-[#2a2a2a]"
+                            >
+                              <Edit className="mr-3 h-4 w-4 text-gray-400 group-hover:text-gray-500 dark:text-gray-500" />
+                              编辑
+                            </button>
+                            <button
+                              onClick={() => {
+                                setOpenDropdownId(null);
+                                setSelectedOrder(row);
+                                setWorkflowModalOpen(true);
+                              }}
+                              className="group flex items-center w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-[#2a2a2a]"
+                            >
+                              <Workflow className="mr-3 h-4 w-4 text-gray-400 group-hover:text-gray-500 dark:text-gray-500" />
+                              工作流
+                            </button>
+                            <button
+                              onClick={() => {
+                                setOpenDropdownId(null);
+                                setSelectedOrder(row);
+                                setFilesModalOpen(true);
+                              }}
+                              className="group flex items-center w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-[#2a2a2a]"
+                            >
+                              <FolderOpen className="mr-3 h-4 w-4 text-gray-400 group-hover:text-gray-500 dark:text-gray-500" />
+                              文件
+                            </button>
+                          </div>
+                        </div>
+                      )}
+                    </div>
                   </td>
                 </tr>
               ))}
@@ -159,6 +225,81 @@ const Orders = () => {
         </div>
 
       </div>
+
+      {/* Workflow Modal */}
+      {workflowModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
+          <div className="bg-white dark:bg-[#1e1e1e] rounded-2xl shadow-xl w-full max-w-2xl flex flex-col max-h-[90vh] border border-gray-100 dark:border-[#333]">
+            <div className="flex justify-between items-center p-6 border-b border-gray-100 dark:border-[#333]">
+              <div>
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white">工作流配置</h3>
+                <p className="text-sm text-gray-500 mt-1">订单：{selectedOrder?.name} ({selectedOrder?.id})</p>
+              </div>
+              <button 
+                onClick={() => setWorkflowModalOpen(false)}
+                className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            
+            <div className="p-8 overflow-y-auto flex-1 flex flex-col items-center justify-center text-center">
+              <Workflow className="w-16 h-16 text-gray-300 dark:text-[#333] mb-4" />
+              <h4 className="text-lg font-medium text-gray-900 dark:text-white mb-2">订单工作流详情</h4>
+              <p className="text-gray-500 max-w-md">
+                此处将展示该订单的工作流节点、审批进度和当前所处的阶段。（功能开发中）
+              </p>
+            </div>
+            
+            <div className="p-6 border-t border-gray-100 dark:border-[#333] flex justify-end">
+              <button
+                onClick={() => setWorkflowModalOpen(false)}
+                className="px-6 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-[#1f2028] border border-gray-200 dark:border-[#333] rounded-lg hover:bg-gray-50 dark:hover:bg-[#2a2a2a] transition-colors"
+              >
+                关闭
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Files Modal */}
+      {filesModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
+          <div className="bg-white dark:bg-[#1e1e1e] rounded-2xl shadow-xl w-full max-w-2xl flex flex-col max-h-[90vh] border border-gray-100 dark:border-[#333]">
+            <div className="flex justify-between items-center p-6 border-b border-gray-100 dark:border-[#333]">
+              <div>
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white">文件管理</h3>
+                <p className="text-sm text-gray-500 mt-1">订单：{selectedOrder?.name} ({selectedOrder?.id})</p>
+              </div>
+              <button 
+                onClick={() => setFilesModalOpen(false)}
+                className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            
+            <div className="p-8 overflow-y-auto flex-1 flex flex-col items-center justify-center text-center">
+              <FolderOpen className="w-16 h-16 text-gray-300 dark:text-[#333] mb-4" />
+              <h4 className="text-lg font-medium text-gray-900 dark:text-white mb-2">订单关联文件</h4>
+              <p className="text-gray-500 max-w-md">
+                此处将展示该订单所需收集的资料清单、已上传的文件和模板下载链接。（功能开发中）
+              </p>
+            </div>
+            
+            <div className="p-6 border-t border-gray-100 dark:border-[#333] flex justify-end">
+              <button
+                onClick={() => setFilesModalOpen(false)}
+                className="px-6 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-[#1f2028] border border-gray-200 dark:border-[#333] rounded-lg hover:bg-gray-50 dark:hover:bg-[#2a2a2a] transition-colors"
+              >
+                关闭
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 };

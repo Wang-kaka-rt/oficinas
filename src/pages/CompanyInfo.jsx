@@ -25,14 +25,12 @@ const CompanyInfo = () => {
 
   return (
     <div>
-      <PageHeader title="公司信息" subtitle="LAW FIRM MANAGEMENT OS" />
+      <PageHeader 
+        title="公司信息" 
+        subtitle="管理律所对外的基本展示信息与财务相关信息。" 
+      />
       
-      <div className="bg-white dark:bg-[#1e1e1e] rounded-2xl shadow-sm border border-gray-100 dark:border-[#333] p-8 max-w-4xl">
-        <div className="mb-8 border-b border-gray-100 dark:border-[#333] pb-6">
-          <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">基础信息</h2>
-          <p className="text-sm text-gray-500">管理律所对外的基本展示信息与财务相关信息。</p>
-        </div>
-
+      <div className="mt-6">
         <form onSubmit={handleSubmit} className="space-y-8">
           
           {/* Logo 上传区域 */}

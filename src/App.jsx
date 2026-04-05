@@ -3,9 +3,12 @@ import { useEffect } from 'react';
 import Layout from './components/Layout';
 import Dashboard from './pages/Dashboard';
 import Orders from './pages/Orders';
+import Clients from './pages/Clients';
 import Finance from './pages/Finance';
 import Categories from './pages/Categories';
 import CategoryForm from './pages/CategoryForm';
+import OrderForm from './pages/OrderForm';
+import InvoiceForm from './pages/InvoiceForm';
 import Personalize from './pages/Personalize';
 import CompanyInfo from './pages/CompanyInfo';
 
@@ -23,7 +26,7 @@ function App() {
       <Route path="/" element={<Layout />}>
         <Route index element={<Dashboard />} />
         <Route path="orders" element={<Orders />} />
-        <Route path="clients" element={<div className="p-4 text-gray-900 dark:text-white">客户档案 (待开发)</div>} />
+        <Route path="clients" element={<Clients />} />
         <Route path="finance" element={<Finance />} />
         <Route path="settings/company" element={<CompanyInfo />} />
         <Route path="settings/categories" element={<Categories />} />
@@ -33,6 +36,10 @@ function App() {
       </Route>
       
       {/* 独立于 Layout 的全屏页面 */}
+      <Route path="/orders/new" element={<OrderForm />} />
+      <Route path="/orders/:id" element={<OrderForm />} />
+      <Route path="/finance/new" element={<InvoiceForm />} />
+      <Route path="/finance/:id" element={<InvoiceForm />} />
       <Route path="/settings/categories/new" element={<CategoryForm />} />
       <Route path="/settings/categories/:id" element={<CategoryForm />} />
     </Routes>

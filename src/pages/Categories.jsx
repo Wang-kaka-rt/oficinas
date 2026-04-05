@@ -25,11 +25,10 @@ const Categories = () => {
 
   return (
     <div>
-      <PageHeader title="业务分类管理" subtitle="LAW FIRM MANAGEMENT OS" />
-      
-      <div className="bg-white dark:bg-[#1e1e1e] rounded-2xl shadow-sm border border-gray-100 dark:border-[#333] p-6">
-        <div className="flex justify-between items-center mb-8">
-          <p className="text-sm text-gray-500 font-medium">配置系统中可用的业务标签</p>
+      <PageHeader 
+        title="业务分类管理" 
+        subtitle="配置系统中可用的业务标签" 
+        rightElement={
           <button 
             onClick={() => navigate('/settings/categories/new')}
             className="flex items-center bg-gray-900 dark:bg-white text-white dark:text-gray-900 px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors"
@@ -37,14 +36,16 @@ const Categories = () => {
             <Plus className="w-4 h-4 mr-2" />
             新增分类
           </button>
-        </div>
-
+        }
+      />
+      
+      <div className="mt-6">
         <div className="flex flex-col space-y-3">
           {data.map((item, idx) => (
             <div 
               key={idx} 
               onClick={() => navigate(`/settings/categories/${idx}`)}
-              className="bg-gray-50 dark:bg-[#2a2a2a] rounded-xl border border-gray-100 dark:border-[#333] p-4 flex items-center justify-between hover:shadow-md transition-shadow cursor-pointer group"
+              className="bg-white dark:bg-[#2a2a2a] rounded-xl border border-gray-200 dark:border-[#333] p-4 flex items-center justify-between hover:shadow-md transition-shadow cursor-pointer group"
             >
               <div className="flex items-center space-x-4">
                 <div className="w-10 h-10 rounded-lg bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center text-blue-600 dark:text-blue-400 group-hover:bg-blue-100 transition-colors shrink-0">

@@ -25,7 +25,7 @@ const CategoryForm = () => {
   });
 
   // Custom Forms State
-  const [customForms, setCustomForms] = useState([
+  const [customForms] = useState([
     { id: 1, name: '客户基础信息表', fieldCount: 8, updatedAt: '2026-04-01' },
     { id: 2, name: '资产申报附属表', fieldCount: 15, updatedAt: '2026-04-03' }
   ]);
@@ -62,13 +62,6 @@ const CategoryForm = () => {
 
   const renderBasicForm = () => (
     <div className="bg-white dark:bg-[#16171d] rounded-2xl shadow-sm border border-gray-100 dark:border-[#2e303a] p-10 w-full max-w-3xl mx-auto mt-4">
-      <div className="mb-8 border-b border-gray-100 dark:border-[#2e303a] pb-6">
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-          {isEdit ? "编辑业务分类" : "新增业务分类"}
-        </h2>
-        <p className="text-sm text-gray-500">配置详细的分类信息以便于系统对案件进行更好的归档与统计。</p>
-      </div>
-
       <form onSubmit={handleSubmit} className="space-y-6">
         <div>
           <label htmlFor="title" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
@@ -123,20 +116,6 @@ const CategoryForm = () => {
 
   const renderCustomForms = () => (
     <div className="bg-white dark:bg-[#16171d] rounded-2xl shadow-sm border border-gray-100 dark:border-[#2e303a] p-10 w-full max-w-4xl mx-auto mt-4">
-      <div className="mb-8 border-b border-gray-100 dark:border-[#2e303a] pb-6 flex justify-between items-center">
-        <div>
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">自定义表单</h2>
-          <p className="text-sm text-gray-500">为该分类配置专属的客户信息收集表或内部流转表单。</p>
-        </div>
-        <button 
-          onClick={() => openFormModal()}
-          className="flex items-center bg-gray-900 dark:bg-white text-white dark:text-gray-900 px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors"
-        >
-          <Plus className="w-4 h-4 mr-2" />
-          新建表单
-        </button>
-      </div>
-
       <div className="flex flex-col space-y-3">
         {customForms.map((form) => (
           <div 
@@ -177,11 +156,11 @@ const CategoryForm = () => {
   );
 
   return (
-    <div className="flex min-h-screen bg-gray-50 dark:bg-[#121212] text-gray-900 dark:text-gray-100">
+    <div className="flex min-h-screen bg-[#fcfaf5] dark:bg-[#121212] text-gray-900 dark:text-gray-100">
       
       {/* 左侧导航栏 - 固定在全屏布局中 */}
-      <aside className="w-64 h-screen border-r border-gray-200 dark:border-[#2e303a] bg-white dark:bg-[#16171d] flex flex-col shrink-0">
-        <div className="flex items-center px-6 py-6 border-b border-gray-200 dark:border-[#2e303a]">
+      <aside className="w-64 h-screen border-r border-[#f0ece1] dark:border-[#2e303a] bg-[#fcfaf5] dark:bg-[#16171d] flex flex-col shrink-0">
+        <div className="flex items-center px-6 py-6 border-b border-[#f0ece1] dark:border-[#2e303a]">
           <button 
             onClick={() => navigate('/settings/categories')}
             className="flex items-center text-sm font-medium text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition-colors"
@@ -235,11 +214,25 @@ const CategoryForm = () => {
       </aside>
 
       {/* 右侧主内容区域 */}
-      <div className="flex-1 flex flex-col h-screen overflow-hidden bg-gray-50/50 dark:bg-[#121212] relative">
-        <header className="bg-white dark:bg-[#16171d] border-b border-gray-200 dark:border-[#2e303a] px-8 py-5 flex items-center shadow-sm">
-          <h1 className="text-lg font-bold text-gray-900 dark:text-white">
-            {activeTab === 'basic' ? (isEdit ? "编辑业务分类" : "新增业务分类") : "自定义表单管理"}
-          </h1>
+      <div className="flex-1 flex flex-col h-screen overflow-hidden bg-[#fcfaf5] dark:bg-[#121212] relative">
+        <header className="bg-[#fcfaf5] dark:bg-[#16171d] border-b border-[#f0ece1] dark:border-[#2e303a] px-8 py-5 flex items-center justify-between shadow-sm">
+          <div>
+            <h1 className="text-xl font-bold text-gray-900 dark:text-white mb-1">
+              {activeTab === 'basic' ? (isEdit ? "编辑业务分类" : "新增业务分类") : "自定义表单"}
+            </h1>
+            <p className="text-sm text-gray-500">
+              {activeTab === 'basic' ? "配置详细的分类信息以便于系统对案件进行更好的归档与统计。" : "为该分类配置专属的客户信息收集表或内部流转表单。"}
+            </p>
+          </div>
+          {activeTab === 'custom-forms' && (
+            <button 
+              onClick={() => openFormModal()}
+              className="flex items-center bg-gray-900 dark:bg-white text-white dark:text-gray-900 px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors"
+            >
+              <Plus className="w-4 h-4 mr-2" />
+              新建表单
+            </button>
+          )}
         </header>
         
         <main className="flex-1 overflow-y-auto p-8">

@@ -36,7 +36,7 @@ const Sidebar = () => {
     }`;
 
   return (
-    <aside className="w-64 h-screen border-r border-gray-200 dark:border-darkBorder bg-white dark:bg-darkCard flex flex-col transition-colors">
+    <aside className="w-64 h-screen border-r border-[#f0ece1] dark:border-darkBorder bg-[#fcfaf5] dark:bg-darkCard flex flex-col transition-colors">
       <div className="flex items-center px-6 py-6">
         <div className="w-8 h-8 bg-black dark:bg-white rounded-md flex items-center justify-center mr-3">
           <Briefcase className="w-5 h-5 text-white dark:text-black" />
